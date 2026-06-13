@@ -1,0 +1,99 @@
+<!--Codigo por I L A N-->
+    <!--Lana & Lino - Pago-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago — Lana & Lino</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="header">
+    <div class="header-inner">
+      <div></div>
+      <div class="header-logo"><a href="index.html">Lana &amp; Lino</a></div>
+      <div class="header-der">
+        <button class="toggle-oscuro" id="btn-oscuro" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="cabecera-pagina">
+      <div class="cabecera-pagina-inner">
+        <h1>Finalizar compra</h1>
+      </div>
+    </div>
+    <div class="layout-pago contenedor">
+      <form class="pago-form" id="form-pago" novalidate>
+        <div>
+          <h3>Método de pago</h3>
+          <div class="form-grupo" style="margin-top:12px">
+            <label class="form-label" for="metodo-pago">Seleccioná el método</label>
+            <select class="form-select" id="metodo-pago">
+              <option value="">Elegí un método</option>
+              <option value="transferencia">Transferencia bancaria</option>
+              <option value="debito">Tarjeta de débito</option>
+              <option value="credito">Tarjeta de crédito</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="campos-tarjeta" id="campos-tarjeta">
+          <h3>Datos de la tarjeta</h3>
+          <div class="form-grupo">
+            <label class="form-label" for="num-tarjeta">Número de tarjeta</label>
+            <input class="form-input" type="text" id="num-tarjeta" placeholder="0000 0000 0000 0000" maxlength="19">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-grupo">
+              <label class="form-label" for="venc-tarjeta">Vencimiento</label>
+              <input class="form-input" type="text" id="venc-tarjeta" placeholder="MM/AA" maxlength="5">
+            </div>
+            <div class="form-grupo">
+              <label class="form-label" for="cvv-tarjeta">CVV</label>
+              <input class="form-input" type="text" id="cvv-tarjeta" placeholder="123" maxlength="4">
+            </div>
+          </div>
+          <div class="form-grupo">
+            <label class="form-label" for="titular-tarjeta">Titular</label>
+            <input class="form-input" type="text" id="titular-tarjeta" placeholder="Nombre como figura en la tarjeta">
+          </div>
+        </div>
+
+        <button class="btn btn-primario btn-lg btn-full" id="btn-pagar" type="button" disabled>
+          Confirmar pago
+        </button>
+      </form>
+
+      <aside class="carrito-resumen">
+        <h3>Resumen del pedido</h3>
+        <p id="pago-total-monto" style="font-size:1.5rem;font-weight:700;color:var(--acento);margin-top:12px">$0</p>
+        <br>
+        <a href="carrito.html" class="btn btn-ghost btn-full btn-sm">← Volver al carrito</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-pie" style="max-width:var(--ancho-max);margin:0 auto;padding:16px 24px">
+      <p>© 2025 Lana &amp; Lino.</p>
+      <p>Desarrollado por Ilan Ariel Pitashny</p>
+    </div>
+  </footer>
+
+</div>
+<script src="js/api.js"></script>
+<script src="js/header.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

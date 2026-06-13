@@ -1,0 +1,60 @@
+<!--Codigo por I L A N-->
+    <!--Lana & Lino - Login-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión — Lana & Lino</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="header">
+    <div class="header-inner">
+      <div></div>
+      <div class="header-logo"><a href="index.html">Lana &amp; Lino</a></div>
+      <div class="header-der">
+        <button class="toggle-oscuro" id="btn-oscuro" type="button" title="Cambiar tema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-contenedor">
+      <div class="auth-caja">
+        <h2>Iniciar sesión</h2>
+        <p class="auth-subtitulo">Ingresá con tu cuenta de Lana & Lino</p>
+
+        <form class="auth-form" id="form-login" novalidate>
+          <div class="form-grupo">
+            <label class="form-label" for="login-email">Email</label>
+            <input class="form-input" type="email" id="login-email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-grupo">
+            <label class="form-label" for="login-password">Contraseña</label>
+            <input class="form-input" type="password" id="login-password" placeholder="••••••" required>
+          </div>
+          <button class="btn btn-primario btn-full btn-lg" type="submit">Iniciar sesión</button>
+        </form>
+
+        <p class="auth-footer">¿No tenés cuenta? <a href="registro.html">Registrate</a></p>
+      </div>
+    </div>
+  </main>
+
+</div>
+<script src="js/api.js"></script>
+<script src="js/header.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
