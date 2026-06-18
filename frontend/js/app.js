@@ -47,7 +47,7 @@ async function cargarCarrito() {
             <p class="carrito-item-precio">${formatearPrecio(precio)}</p>
           </div>
           <button class="btn btn-peligro btn-sm"
-            onclick="eliminarDelCarrito(${item.id_detalle_pedido || item.id}, this)">
+            onclick="eliminarDelCarrito(${item.idInventario}, this)">
             Eliminar
           </button>
         </div>`;
@@ -70,10 +70,11 @@ async function cargarCarrito() {
 async function eliminarDelCarrito(idDetalle, btn) {
   try {
     const usuario = Api.obtenerUsuario();
+    const uid     = usuario.id_usuario || usuario.id;
     await Api.delete("/eliminarProductoCarrito", {
-  id_usuario: uid,
-  id_inventario: item.idInventario
-});
+      id_usuario:    uid,
+      id_inventario: idDetalle
+    });
     mostrarToast("Producto eliminado del carrito");
     actualizarBadgeCarrito();
     cargarCarrito();
@@ -87,49 +88,83 @@ async function eliminarDelCarrito(idDetalle, btn) {
 // ============================================================
 
 //3 - Init pago
-function initPago() {
-  const selectMetodo = document.getElementById("metodo-pago");
+async function initPago() {
+  const selectMetodo  = document.getElementById("metodo-pago");
   const camposTarjeta = document.getElementById("campos-tarjeta");
   const btnPagar      = document.getElementById("btn-pagar");
+  const totalEl       = document.getElementById("pago-total");
+  const montoPagoEl   = document.getElementById("pago-total-monto");
   if (!selectMetodo) return;
 
-  const total  = sessionStorage.getItem("carritoTotal") || 0;
-  const totalEl = document.getElementById("pago-total");
-  if (totalEl) totalEl.textContent = formatearPrecio(total);
+  //--Traer carrito del backend--
+  try {
+    const usuario = Api.obtenerUsuario();
+    const uid     = usuario.id_usuario || usuario.id;
+    const res     = await Api.get(`/obtenerProductosCarrito/${uid}`);
+    const items   = res.payload || [];
 
-  selectMetodo.addEventListener("change", () => {
-    const necesitaTarjeta = ["debito", "credito"].includes(selectMetodo.value);
-    camposTarjeta?.classList.toggle("visible", necesitaTarjeta);
-    validarPago();
-  });
+    let total = 0;
+    items.forEach(item => {
+      total += Number(item.precio || 0);
+    });
 
-  document.querySelectorAll("#form-pago input, #form-pago select").forEach(el => {
-    el.addEventListener("input", validarPago);
-  });
+    if (totalEl)     totalEl.textContent     = formatearPrecio(total);
+    if (montoPagoEl) montoPagoEl.textContent = formatearPrecio(total);
+  } catch { /* silencioso */ }
+
+    selectMetodo.addEventListener("change", () => {
+      const necesitaTarjeta = ["debito", "credito"].includes(selectMetodo.value);
+      camposTarjeta?.classList.toggle("visible", necesitaTarjeta);
+      validarPago();
+    });
+
+    document.querySelectorAll("#form-pago input").forEach(el => {
+      el.addEventListener("input", validarPago);
+    });
 
   if (btnPagar) {
     btnPagar.addEventListener("click", async () => {
+      //--Vaciar carrito al pagar--
+      try {
+        const usuario = Api.obtenerUsuario();
+        const uid     = usuario.id_usuario || usuario.id;
+        const res     = await Api.get(`/obtenerProductosCarrito/${uid}`);
+        const items   = res.payload || [];
+
+        await Promise.all(items.map(item =>
+          Api.delete("/eliminarProductoCarrito", {
+            id_usuario:    uid,
+            id_inventario: item.idInventario
+          })
+        ));
+      } catch { /* silencioso */ }
+
       mostrarToast("¡Pago aprobado con éxito! 🎉");
       setTimeout(() => { window.location.href = "index.html"; }, 2000);
     });
   }
 }
 
+// - Validar pago
 function validarPago() {
-  const metodo  = document.getElementById("metodo-pago")?.value;
+  const metodo   = document.getElementById("metodo-pago")?.value;
   const btnPagar = document.getElementById("btn-pagar");
   if (!btnPagar) return;
 
-  let valido = !!metodo;
-
-  if (["debito", "credito"].includes(metodo)) {
-    const numero  = document.getElementById("num-tarjeta")?.value.trim();
-    const venc    = document.getElementById("venc-tarjeta")?.value.trim();
-    const titular = document.getElementById("titular-tarjeta")?.value.trim();
-    valido = valido && !!numero && !!venc && !!titular;
+  if (!metodo) {
+    btnPagar.disabled = true;
+    return;
   }
 
-  btnPagar.disabled = !valido;
+  if (metodo === "transferencia") {
+    btnPagar.disabled = false;
+    return;
+  }
+
+  const numero  = document.getElementById("num-tarjeta")?.value.trim();
+  const venc    = document.getElementById("venc-tarjeta")?.value.trim();
+  const titular = document.getElementById("titular-tarjeta")?.value.trim();
+  btnPagar.disabled = !(numero && venc && titular);
 }
 
 // ============================================================
